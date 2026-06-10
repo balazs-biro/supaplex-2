@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supaplex 2.0</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="cabinet">
+    <header class="topbar">
+      <div class="title-block">
+        <h1>SUPAPLEX</h1>
+        <span class="subtitle">2.0 · TUNING EDITION</span>
+      </div>
+      <div class="hud">
+        <div class="hud-item">
+          <span class="hud-label">IDŐ</span>
+          <span id="timeDisplay" class="hud-value time">00:00</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">INFOTRON</span>
+          <span id="infotronCount" class="hud-value">0</span>
+        </div>
+        <button id="muteBtn" class="hud-btn" title="Némítás (M)">🔊</button>
+      </div>
+    </header>
+
+    <div class="levelbar">
+      <div class="level-info">
+        <span id="levelNum" class="level-num">1/4</span>
+        <span id="levelName" class="level-name">ELSŐ LÉPÉSEK</span>
+      </div>
+      <div class="progress" title="Begyűjtött infotronok">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+      <div class="level-nav">
+        <button id="prevLevel" class="hud-btn" title="Előző pálya">◀</button>
+        <button id="restartBtn" class="hud-btn" title="Újraindítás (R)">↺</button>
+        <button id="nextLevel" class="hud-btn" title="Következő pálya">▶</button>
+      </div>
+    </div>
+
+    <div class="screen">
+      <canvas id="game"></canvas>
+      <div id="overlay" class="overlay hidden">
+        <div class="overlay-box">
+          <h2 id="overlayTitle">SUPAPLEX</h2>
+          <p id="overlayText">Nyomj egy gombot a kezdéshez</p>
+          <p class="overlay-hint" id="overlayHint">Nyilak: mozgás · R: újra · M: némítás</p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="controls">
+      <span>⬆️⬇️⬅️➡️ Mozgás</span>
+      <span>SPACE+irány Evés helyben</span>
+      <span>R Újraindítás</span>
+      <span>N Következő pálya</span>
+      <span>M Némítás</span>
+    </footer>
+
+    <div class="dpad">
+      <div class="dpad-grid">
+        <button class="dpad-btn" data-dir="up">▲</button>
+        <button class="dpad-btn" data-dir="left">◀</button>
+        <button class="dpad-btn" data-dir="down">▼</button>
+        <button class="dpad-btn" data-dir="right">▶</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="levels.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
