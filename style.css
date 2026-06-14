@@ -364,18 +364,25 @@ canvas {
   letter-spacing: 0.08em;
   margin-bottom: 1rem;
 }
+.gift-event {
+  display: block;
+  margin-top: 0.5rem;
+}
 .gift-title {
-  font-size: 1.4rem;
+  display: block;
+  font-size: 1.3rem;
   font-weight: bold;
   color: var(--accent-2);
-  letter-spacing: 0.22em;
+  letter-spacing: 0.15em;
   text-shadow: 0 0 8px rgba(41, 194, 255, 0.5);
+  margin-bottom: 0.3rem;
 }
 .gift-subtitle {
+  display: block;
   font-size: 1rem;
   color: var(--text);
-  letter-spacing: 0.28em;
-  margin: 0.3rem 0 0.9rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.9rem;
 }
 .gift-meta {
   color: var(--good);
