@@ -37,6 +37,8 @@
     'E': T.EXIT,
   };
 
+  const BIRTHDAY_LEVEL = 4; // 5. pálya – mindig feloldott
+
   const TILE = 36;        // logikai csempeméret pixelben
   const STEP_MS = 90;     // egy világ-tick hossza (gravitáció + mozgás)
   const VIEW_COLS = 20;   // látható oszlopok
@@ -156,7 +158,9 @@
     levelNameEl.textContent = LEVELS[levelIndex].name;
     levelNumEl.textContent = `${levelIndex + 1}/${LEVELS.length}`;
     prevBtn.disabled = levelIndex === 0;
-    nextBtn.disabled = levelIndex + 1 >= LEVELS.length || levelIndex + 1 > getUnlocked();
+    const nextIdx = levelIndex + 1;
+    nextBtn.disabled = nextIdx >= LEVELS.length ||
+      (nextIdx > getUnlocked() && nextIdx !== BIRTHDAY_LEVEL);
   }
 
   function updateTimeHud() {
@@ -396,6 +400,10 @@
   }
 
   function showWinOverlay() {
+    if (levelIndex === BIRTHDAY_LEVEL) {
+      document.getElementById('giftPage').classList.remove('hidden');
+      return;
+    }
     const hasNext = levelIndex < LEVELS.length - 1;
     showOverlay(
       'GYŐZELEM!',
@@ -997,7 +1005,7 @@
 
   function gotoLevel(i) {
     if (i < 0 || i >= LEVELS.length) return;
-    if (i > getUnlocked()) return; // még zárt pálya
+    if (i > getUnlocked() && i !== BIRTHDAY_LEVEL) return;
     loadLevel(i);
   }
 
@@ -1084,6 +1092,18 @@
     btn.addEventListener('pointerup', release);
     btn.addEventListener('pointercancel', release);
     btn.addEventListener('pointerleave', release);
+  });
+
+  // ---- Ajándék oldal bezárása ------------------------------------------
+  document.getElementById('giftCloseBtn').addEventListener('click', () => {
+    document.getElementById('giftPage').classList.add('hidden');
+    showOverlay(
+      'GYŐZELEM!',
+      'Boldog születésnapot!',
+      'win',
+      'R: újra · 1–' + LEVELS.length + ': pályaválasztás'
+    );
+    updateHud();
   });
 
   // ---- Indulás ---------------------------------------------------------

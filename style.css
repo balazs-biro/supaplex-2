@@ -326,3 +326,86 @@ canvas {
   .level-name { font-size: 12px; letter-spacing: 2px; }
   .controls { gap: 10px; font-size: 10px; }
 }
+
+/* ---- Ajándék oldal ---------------------------------------------------- */
+.gift-page {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 7, 13, 0.97);
+  z-index: 20;
+}
+.gift-page.hidden { display: none; }
+
+.gift-box {
+  background: linear-gradient(160deg, #0d1424 60%, #16203a);
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 440px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(255, 138, 30, 0.25);
+  font-family: 'Courier New', monospace;
+}
+.gift-header {
+  font-size: 1.2rem;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  text-shadow: 0 0 12px rgba(255, 138, 30, 0.6);
+  margin-bottom: 0.8rem;
+  font-weight: bold;
+}
+.gift-intro {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+.gift-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--accent-2);
+  letter-spacing: 0.22em;
+  text-shadow: 0 0 8px rgba(41, 194, 255, 0.5);
+}
+.gift-subtitle {
+  font-size: 1rem;
+  color: var(--text);
+  letter-spacing: 0.28em;
+  margin: 0.3rem 0 0.9rem;
+}
+.gift-meta {
+  color: var(--good);
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  line-height: 1.8;
+  margin-bottom: 0.8rem;
+}
+.gift-desc {
+  color: var(--text);
+  font-size: 0.8rem;
+  line-height: 1.65;
+  letter-spacing: 0.03em;
+  border-top: 1px solid var(--frame);
+  padding-top: 0.8rem;
+  margin-top: 0.4rem;
+}
+.gift-close {
+  margin-top: 1.4rem;
+  padding: 0.5rem 1.6rem;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.88rem;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background 0.15s;
+}
+.gift-close:hover { background: #ffaa55; }
