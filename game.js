@@ -37,7 +37,9 @@
     'E': T.EXIT,
   };
 
-  const BIRTHDAY_LEVEL = 4; // 5. pálya – mindig feloldott
+  const BIRTHDAY_LEVEL = 4;   // rejtett bónuszpálya indexe
+  const PUBLIC_COUNT = BIRTHDAY_LEVEL; // 4 nyilvános pálya (0..3)
+  function publicUnlocked() { return Math.min(getUnlocked(), PUBLIC_COUNT - 1); }
 
   const TILE = 36;        // logikai csempeméret pixelben
   const STEP_MS = 90;     // egy világ-tick hossza (gravitáció + mozgás)
@@ -77,7 +79,7 @@
   }
 
   // ---- Játékállapot ----------------------------------------------------
-  let levelIndex = getUnlocked();
+  let levelIndex = Math.min(getUnlocked(), PUBLIC_COUNT - 1);
   let ROWS, COLS;
   let grid;            // 2D tömb csempekódokkal
   let anim;            // 2D tömb: animáció leírók {fx,fy,t}
@@ -156,11 +158,16 @@
     const pct = totalInfotrons ? (collected / totalInfotrons) * 100 : 100;
     progressFillEl.style.width = pct + '%';
     levelNameEl.textContent = LEVELS[levelIndex].name;
-    levelNumEl.textContent = `${levelIndex + 1}/${LEVELS.length}`;
-    prevBtn.disabled = levelIndex === 0;
-    const nextIdx = levelIndex + 1;
-    nextBtn.disabled = nextIdx >= LEVELS.length ||
-      (nextIdx > getUnlocked() && nextIdx !== BIRTHDAY_LEVEL);
+    if (levelIndex === BIRTHDAY_LEVEL) {
+      levelNumEl.textContent = '🎂';
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+    } else {
+      levelNumEl.textContent = `${levelIndex + 1}/${PUBLIC_COUNT}`;
+      prevBtn.disabled = levelIndex === 0;
+      const nextIdx = levelIndex + 1;
+      nextBtn.disabled = nextIdx >= PUBLIC_COUNT || nextIdx > publicUnlocked();
+    }
   }
 
   function updateTimeHud() {
@@ -394,7 +401,7 @@
   function win() {
     status = 'won';
     winTimer = 900;
-    setUnlocked(levelIndex + 1);
+    if (levelIndex + 1 < PUBLIC_COUNT) setUnlocked(levelIndex + 1);
     sfxWin();
     fxWin(murphy.x, murphy.y);
   }
@@ -1004,12 +1011,13 @@
   }
 
   function gotoLevel(i) {
-    if (i < 0 || i >= LEVELS.length) return;
-    if (i > getUnlocked() && i !== BIRTHDAY_LEVEL) return;
+    if (i < 0 || i >= PUBLIC_COUNT) return;
+    if (i > publicUnlocked()) return;
     loadLevel(i);
   }
 
   window.addEventListener('keydown', (e) => {
+    if (e.target && e.target.tagName === 'INPUT') return;
     const k = e.key;
 
     if (k === 'm' || k === 'M') {
@@ -1024,15 +1032,15 @@
       return;
     }
     if ((k === 'n' || k === 'N') && status === 'won') {
-      if (levelIndex < LEVELS.length - 1) {
+      if (levelIndex < PUBLIC_COUNT - 1) {
         gotoLevel(levelIndex + 1);
         startGame();
       }
       e.preventDefault();
       return;
     }
-    // 1..9: közvetlen pályaválasztás (csak feloldott)
-    if (k >= '1' && k <= String(LEVELS.length)) {
+    // 1..4: közvetlen pályaválasztás (csak nyilvános, feloldott)
+    if (k >= '1' && k <= String(PUBLIC_COUNT)) {
       gotoLevel(parseInt(k, 10) - 1);
       e.preventDefault();
       return;
@@ -1101,13 +1109,49 @@
       'GYŐZELEM!',
       'Boldog születésnapot!',
       'win',
-      'R: újra · 1–' + LEVELS.length + ': pályaválasztás'
+      'R: újra · 1–' + PUBLIC_COUNT + ': pályaválasztás'
     );
     updateHud();
   });
 
+  // ---- Jelszó-ablak ---------------------------------------------------
+  const SECRET_PASSWORD = 'Születésnap';
+  const norm = (s) => s.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+  const secretBtn  = document.getElementById('secretBtn');
+  const pwModal    = document.getElementById('passwordModal');
+  const pwInput    = document.getElementById('passwordInput');
+  const pwSubmit   = document.getElementById('passwordSubmit');
+  const pwCancel   = document.getElementById('passwordCancel');
+  const pwError    = document.getElementById('passwordError');
+
+  function openPw() {
+    pwError.textContent = '';
+    pwInput.value = '';
+    pwModal.classList.remove('hidden');
+    pwInput.focus();
+  }
+  function closePw() { pwModal.classList.add('hidden'); }
+  function tryPw() {
+    if (norm(pwInput.value) === norm(SECRET_PASSWORD)) {
+      closePw();
+      loadLevel(BIRTHDAY_LEVEL);
+    } else {
+      pwError.textContent = 'Hibás jelszó';
+      pwInput.value = '';
+      pwInput.focus();
+    }
+  }
+  secretBtn.addEventListener('click', openPw);
+  pwSubmit.addEventListener('click', tryPw);
+  pwCancel.addEventListener('click', closePw);
+  pwInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); tryPw(); }
+    if (e.key === 'Escape') { e.preventDefault(); closePw(); }
+  });
+
   // ---- Indulás ---------------------------------------------------------
   setMuted(muted);
-  loadLevel(levelIndex);
+  loadLevel(Math.min(getUnlocked(), PUBLIC_COUNT - 1));
   requestAnimationFrame(frame);
 })();

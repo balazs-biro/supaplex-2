@@ -23,6 +23,7 @@
           <span id="infotronCount" class="hud-value">0</span>
         </div>
         <button id="muteBtn" class="hud-btn" title="Némítás (M)">🔊</button>
+        <button id="secretBtn" class="hud-btn secret-btn" title="">·</button>
       </div>
     </header>
 
@@ -48,6 +49,18 @@
           <h2 id="overlayTitle">SUPAPLEX</h2>
           <p id="overlayText">Nyomj egy gombot a kezdéshez</p>
           <p class="overlay-hint" id="overlayHint">Nyilak: mozgás · R: újra · M: némítás</p>
+        </div>
+      </div>
+      <div id="passwordModal" class="password-modal hidden">
+        <div class="password-box">
+          <h2 class="password-title">JELSZÓ</h2>
+          <input id="passwordInput" class="password-input" type="text"
+                 autocomplete="off" spellcheck="false" placeholder="..." />
+          <p id="passwordError" class="password-error"></p>
+          <div class="password-actions">
+            <button id="passwordSubmit" class="gift-close">OK</button>
+            <button id="passwordCancel" class="gift-close password-cancel">Mégse</button>
+          </div>
         </div>
       </div>
       <div id="giftPage" class="gift-page hidden">
